@@ -1,0 +1,7 @@
+export enum TodoStatus {
+  PENDING = 'PENDING',
+  STARTED = 'STARTED',
+  CANCELLED = 'CANCELLED',
+  DELETED = 'DELETED',
+  DONE = 'DONE'
+}

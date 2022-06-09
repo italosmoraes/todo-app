@@ -1,0 +1,14 @@
+{
+  "scripts": {
+    "lint": "eslint . --ext .ts",
+    "test": "jest"
+  },
+  "name": "todo-app",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "private": true,
+  "author": "Italo Moraes",
+  "dependencies": {
+    "ts-transformer-keys": "^0.4.3"
+  }
+}
