@@ -5,7 +5,7 @@ import { TodoStatus } from './types/TodoStatus'
 export const todoModule = {
   // TODO better resolve of input format. Using { input: ... } does not match graphql types
   Mutation: {
-    create: async (_, { input }) => {
+    createTodo: async (_, { input }) => {
       try {
         console.log('> input', input)
 

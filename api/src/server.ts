@@ -5,6 +5,7 @@ import cors from 'cors'
 import { todoModule } from './modules/Todo/TodoModule'
 import { mongodb } from './dataSources/mongodb'
 import { typeDefs } from './graphql/schema'
+import { usersModule } from './modules/Users/UsersModule'
 
 const port = process.env.PORT || 3001
 const server = express()
@@ -25,7 +26,10 @@ mongodb
   })
   .catch((error) => console.log(error))
 
-const graphqlSchema = makeExecutableSchema({ typeDefs: typeDefs, resolvers: todoModule })
+const graphqlSchema = makeExecutableSchema({
+  typeDefs: typeDefs,
+  resolvers: [todoModule, usersModule]
+})
 
 server.use(
   '/graphql',

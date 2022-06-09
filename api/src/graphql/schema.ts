@@ -7,11 +7,24 @@ export const typeDefs = `
     }
 
     type Mutation {
-        create(input: TodoCreateInput): Todo!
+        createTodo(input: TodoCreateInput): Todo!
+        createUser(input: CreateUserInput): User!
     }
 
     input TodoCreateInput {
         text: String!
+    }
+
+    input CreateUserInput {
+        firstName: String!
+        lastName: String!
+        username: String!
+    }
+
+    type User {
+        firstName: String!
+        lastName: String!
+        username: String!
     }
 
     type Todo {
