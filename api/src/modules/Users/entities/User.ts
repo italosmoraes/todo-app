@@ -14,4 +14,10 @@ export class User {
 
   @Column()
   username: string
+
+  @Column()
+  password: string
+
+  @Column()
+  passwordSalt: string
 }

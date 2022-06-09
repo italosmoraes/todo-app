@@ -1,4 +1,5 @@
-import express from 'express'
+import express, { NextFunction, Request, Response } from 'express'
+import jwt from 'jsonwebtoken'
 import { graphqlHTTP } from 'express-graphql'
 import { makeExecutableSchema } from '@graphql-tools/schema'
 import cors from 'cors'
@@ -6,6 +7,8 @@ import { todoModule } from './modules/Todo/TodoModule'
 import { mongodb } from './dataSources/mongodb'
 import { typeDefs } from './graphql/schema'
 import { usersModule } from './modules/Users/UsersModule'
+import { JWT_SECRET } from '../config/env'
+import { ApolloError } from 'apollo-server-core'
 
 const port = process.env.PORT || 3001
 const server = express()
@@ -31,11 +34,36 @@ const graphqlSchema = makeExecutableSchema({
   resolvers: [todoModule, usersModule]
 })
 
+// TODO add auth middleware
+export const authenticate = (req: Request) => {
+  console.log('>>> going through guard...')
+
+  const authToken = req.headers?.authorization?.split(' ')[1]
+
+  if (!authToken) {
+    throw new Error('No auth token provided')
+  }
+
+  try {
+    const decoded = jwt.verify(authToken, JWT_SECRET)
+    return {
+      userId: decoded.userId
+    }
+  } catch (error) {
+    throw new ApolloError('Invalid Token')
+  }
+}
+
+// server.use(AuthGuard)
+
 server.use(
   '/graphql',
   graphqlHTTP((request, response) => ({
     schema: graphqlSchema,
     graphiql: true,
+    // context: async () => {
+    //   console.log('>>> going through context func')
+    // }
     context: {
       request,
       response

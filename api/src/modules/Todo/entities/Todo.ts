@@ -8,6 +8,9 @@ export class Todo {
   id: ObjectId
 
   @Column()
+  userId: ObjectId
+
+  @Column()
   text: string
 
   @Column()
