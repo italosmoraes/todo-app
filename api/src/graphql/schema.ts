@@ -31,7 +31,7 @@ export const typeDefs = `
     }
 
     input UpdateTodoInput {
-        id: String!
+        todoId: String!
         text: String
         status: TodoStatus
     }
@@ -50,6 +50,7 @@ export const typeDefs = `
     }
 
     type Todo {
+        id: String!
         text: String!
         status: TodoStatus!
     }

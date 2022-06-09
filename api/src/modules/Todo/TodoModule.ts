@@ -4,6 +4,8 @@ import { authenticate } from '../../server'
 import { mongodb } from '../../dataSources/mongodb'
 import { Todo } from './entities/Todo'
 import { TodoStatus } from './types/TodoStatus'
+import { ObjectID } from 'typeorm'
+import { ApolloError } from 'apollo-server-core'
 
 export const todoModule = {
   // TODO better resolve of input format. Using { input: ... } does not match graphql types
@@ -18,9 +20,13 @@ export const todoModule = {
   Mutation: {
     createTodo: async (_, { input }, context: BaseContext) => {
       try {
-        console.log('req.headers?.authorization?.split', context.request.headers)
+        // TOOD add an auth guard that can wrap the whole app
 
         const { userId } = authenticate(context.request)
+
+        if (!userId) {
+          throw new ApolloError('Authentication needed')
+        }
 
         const todo = new Todo()
         todo.userId = new ObjectId(userId)
@@ -35,11 +41,28 @@ export const todoModule = {
         throw err
       }
     },
-    updateTodo: async (_, { input }) => {
-      console.log(input)
-      // find by id
-      // verify user is owner
-      // update text and/or status
+    updateTodo: async (_, { input }, context: BaseContext) => {
+      const { userId } = authenticate(context.request)
+
+      if (!userId) {
+        throw new ApolloError('Authentication needed')
+      }
+
+      const record = await mongodb.manager.findOne(Todo, {
+        // @ts-ignore cannot resolve _id type as ObjectId from mongodb
+        where: { _id: new ObjectId(input.todoId) }
+      })
+      console.log(record)
+      if (!record) {
+        throw new ApolloError('Todo not found')
+      }
+
+      record.status = input.status || record.status
+      record.text = input.text || record.text
+
+      await mongodb.manager.save(record)
+
+      return record
     }
   }
 }
