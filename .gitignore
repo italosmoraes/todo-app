@@ -12,4 +12,5 @@ temp/
 *.tsbuildinfo
 yarn-error.log
 
-./resources
+**/.resources/**
+**api/.resources/**
