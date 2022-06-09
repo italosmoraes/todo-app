@@ -10,17 +10,27 @@ import { ApolloError } from 'apollo-server-core'
 export const todoModule = {
   // TODO better resolve of input format. Using { input: ... } does not match graphql types
   Query: {
-    todos: async (_, {}) => {
-      // resolve user from context
-      // get all the todos
-      // return paginated list?
+    todos: async (_, {}, context: BaseContext) => {
+      const { userId } = authenticate(context.request)
+
+      if (!userId) {
+        throw new ApolloError('Authentication needed')
+      }
+
+      const records = await mongodb.manager.find(Todo, {
+        // @ts-ignore cannot resolve _id type as ObjectId from mongodb
+        where: { userId: new ObjectId(userId) }
+      })
+
+      // TODO  return paginated list?
+      return records
     }
   },
 
   Mutation: {
     createTodo: async (_, { input }, context: BaseContext) => {
       try {
-        // TOOD add an auth guard that can wrap the whole app
+        // TOOD add an auth guard that can be wrapped around the resolvers, avoiding repetition
 
         const { userId } = authenticate(context.request)
 

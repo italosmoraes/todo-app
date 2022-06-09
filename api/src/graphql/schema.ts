@@ -2,7 +2,7 @@ export const typeDefs = `
     scalar Object
 
     type Query {
-        todos: Object
+        todos: [Todo]
         users: Object
     }
 
