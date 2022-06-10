@@ -93,6 +93,11 @@ yarn test
 
 
 ### Potential improvements and notes
+-------------------------------------
 
+() the authorization middleware needs to be better wrapped around specific resolvers. as it is, there is a lot of repetition
+() the modules, in reality, only represent resolvers. create actual grapqhl modules would be ideal: https://www.the-guild.dev/blog/graphql-modules-auth
+() having the graphql typeDefs in a text file is messy and does not easily map into Typescript representations of the same. Another way to map those is needed
 
 ### Notes on the task
+-------------------------------------

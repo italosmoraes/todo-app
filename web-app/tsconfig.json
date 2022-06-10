@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noImplicitAny": false,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "*": [
+        ".",
+        "node_modules/*"
+      ],
+      "@todo-app/shared-types": [
+        "../libs/shared/src"
+      ],
+      "@todo-app/shared-types/*": [
+        "../libs/shared/src/*"
+      ]
+    }
+  },
+  "include": [
+    ".",
+    "**/*.ts",
+    "**/*.tsx"
+  ]
+}

@@ -5,7 +5,15 @@
         "target": "ES2019",
         "moduleResolution": "node",
         "sourceMap": true,
-        "outDir": "dist"
+        "outDir": "dist",
+        "paths": {
+            "@todo-app/shared-types": [
+                "libs/shared/src"
+            ],
+            "@todo-app/shared-types/*": [
+                "libs/shared/src/*"
+            ]
+        }
     },
     "lib": [
         "es2020"

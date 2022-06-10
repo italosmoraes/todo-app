@@ -15,7 +15,7 @@ const server = express()
 
 server.use(
   cors({
-    origin: 'http://localhost:3000/todo-app' // TODO resolve from env config
+    origin: 'http://localhost:3000' // TODO resolve from env config
   })
 )
 
