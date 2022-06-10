@@ -4,6 +4,7 @@ import { CREATE_USER, LOGIN } from '../../../graphql/mutations'
 import styled from 'styled-components'
 import { Signup } from '../Signup/Signup'
 import { LoginForm } from '../Login/LoginForm'
+import useAuth from '../../../auth/AuthProvider'
 
 const WelcomeContainer = styled.div`
   display: flex;
@@ -31,30 +32,17 @@ const ActionBtn = styled.div`
 
 export const Welcome = () => {
   // read auth token from store or from local storage
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const { setAuthToken } = useAuth()
+
   const [showSignUpForm, setShowSignUp] = useState(false)
   const [showLogin, setShowLogin] = useState(true)
   const [showError, setShowError] = useState(false)
   const [error, setError] = useState()
 
-  useEffect(() => {
-    if (window.localStorage.getItem('token')) {
-      setIsLoggedIn(true)
-      // TODO handle user redirect
-    }
-  }, [])
-
   const [createUser, { data: createUserData, loading, error: signupError }] =
     useMutation(CREATE_USER)
 
-  const [login, { data: loginData, loading: loadingLogin, error: loginError }] = useMutation(
-    LOGIN,
-    {
-      onError: (error: ApolloError) => {
-        console.log('>>> apollo error', error.message)
-      }
-    }
-  )
+  const [login, { data: loginData, loading: loadingLogin, error: loginError }] = useMutation(LOGIN)
 
   const handleSignup = (formData) => {
     console.log('>>> signup', formData)
@@ -86,16 +74,17 @@ export const Welcome = () => {
   }
 
   useEffect(() => {
-    if (createUserData && createUserData.createUser.token) {
-      window.localStorage.setItem('token', createUserData.createUser.token)
-    }
-
     if (loginData && loginData.login.token) {
-      window.localStorage.setItem('token', loginData.login.token)
+      setAuthToken(loginData.login.token)
     }
+  }, [loginData])
 
+  useEffect(() => {
+    if (createUserData && createUserData.createUser.token) {
+      setAuthToken(createUserData.createUser.token)
+    }
     // call store to login user and lead to the TODO dashboard
-  }, [createUserData, loginData])
+  }, [createUserData])
 
   // const err = {
   //   graphQLErrors: [],
@@ -126,7 +115,7 @@ export const Welcome = () => {
 
   return (
     <WelcomeContainer>
-      {!isLoggedIn && showLogin && <LoginForm handleLogin={handleLogin} />}
+      {showLogin && <LoginForm handleLogin={handleLogin} />}
 
       {showSignUpForm && !showLogin && (
         <ActionBtn
@@ -150,7 +139,7 @@ export const Welcome = () => {
         SIGN UP
       </ActionBtn>
 
-      {!isLoggedIn && showSignUpForm && (
+      {showSignUpForm && (
         <>
           <p>welcome, signup or login to start doing stuff</p>
           <Signup handleSignup={handleSignup} />

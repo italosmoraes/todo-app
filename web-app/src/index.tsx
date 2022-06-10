@@ -5,13 +5,19 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { ApolloProvider } from '@apollo/client'
 import { apolloClient } from './clients/apiClient'
+import { AuthProvider } from './auth/AuthProvider'
+import { StoreProvider } from './store/StoreProvider'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(
   <React.StrictMode>
     <ApolloProvider client={apolloClient}>
-      <App />
+      <AuthProvider>
+        <StoreProvider>
+          <App />
+        </StoreProvider>
+      </AuthProvider>
     </ApolloProvider>
   </React.StrictMode>
 )
