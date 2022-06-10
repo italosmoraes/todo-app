@@ -13,6 +13,7 @@ export interface StoreProviderType {
 
 const StoreContext = React.createContext({} as StoreProviderType)
 
+// TODO there could be a store for reach type of entity e.g. UserStore, TodosStore
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [todos, setTodos] = useState<any[]>([])
   const { isLoggedIn } = useAuth()

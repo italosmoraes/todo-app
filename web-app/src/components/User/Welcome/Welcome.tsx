@@ -32,7 +32,7 @@ const ActionBtn = styled.div`
 
 export const Welcome = () => {
   // read auth token from store or from local storage
-  const { setAuthToken } = useAuth()
+  const { setAuthToken, updateUsername } = useAuth()
 
   const [showSignUpForm, setShowSignUp] = useState(false)
   const [showLogin, setShowLogin] = useState(true)
@@ -76,12 +76,14 @@ export const Welcome = () => {
   useEffect(() => {
     if (loginData && loginData.login.token) {
       setAuthToken(loginData.login.token)
+      updateUsername(loginData.login.user.username)
     }
   }, [loginData])
 
   useEffect(() => {
     if (createUserData && createUserData.createUser.token) {
       setAuthToken(createUserData.createUser.token)
+      updateUsername(createUserData.createUser.user.username)
     }
     // call store to login user and lead to the TODO dashboard
   }, [createUserData])

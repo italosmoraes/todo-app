@@ -6,6 +6,7 @@ export interface AuthContextType {
   token?: string
   isLoggedIn: boolean
   setAuthToken: (authToken: string) => void
+  updateUsername: (name: any) => void
   // login: (email: string, password: string) => void;
   // signUp: (..., usernam: string, password: string) => void;
   // logout: () => void;
@@ -38,8 +39,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoggedIn(true)
   }
 
+  // TODO username needs to be know from localStorage or from token, when user comes back
+  // or fetch it all again
+  const updateUsername = (name: string) => {
+    setUsername(name)
+  }
+
   return (
-    <AuthContext.Provider value={{ token, username, userId, setAuthToken, isLoggedIn }}>
+    <AuthContext.Provider
+      value={{ token, username, userId, setAuthToken, isLoggedIn, updateUsername }}
+    >
       {children}
     </AuthContext.Provider>
   )

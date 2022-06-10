@@ -19,11 +19,12 @@ export const usersModule = {
         user.password = hash
         user.passwordSalt = salt
 
-        await mongodb.manager.save(user)
+        const saved = await mongodb.manager.save(user)
 
         const token = SecurityService.signToken(user.id)
 
         return {
+          user: saved,
           token
         }
       } catch (error) {
@@ -46,7 +47,10 @@ export const usersModule = {
 
       const token = SecurityService.signToken(user.id)
 
-      return { token }
+      return {
+        user,
+        token
+      }
     }
   }
 }

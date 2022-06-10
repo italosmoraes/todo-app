@@ -14,11 +14,13 @@ export const typeDefs = `
     }
 
     type LoginResponse {
+        user: User!
         token: String!
     }
 
     type CreateUserResponse {
         token: String!
+        user: User!
     }
 
     input LoginInput {
@@ -47,6 +49,7 @@ export const typeDefs = `
         firstName: String!
         lastName: String!
         username: String!
+        userId: String!
     }
 
     type Todo {

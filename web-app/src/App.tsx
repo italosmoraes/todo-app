@@ -13,12 +13,12 @@ const PageContainer = styled.div`
 `
 
 function App() {
-  const { isLoggedIn } = useAuth()
+  const { isLoggedIn, username } = useAuth()
 
   return (
     <div className="App">
       <header className="App-header">
-        <h3>It is time ToDo it</h3>
+        <h3>It is time ToDo it, {username}</h3>
       </header>
       <PageContainer>
         {!isLoggedIn && <Welcome />} {isLoggedIn && <TodoDashboard />}
