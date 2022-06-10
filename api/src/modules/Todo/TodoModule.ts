@@ -1,17 +1,17 @@
 import { BaseContext } from 'apollo-server-types'
 import { ObjectId } from 'mongodb'
-import { authenticate } from '../../server'
 import { mongodb } from '../../dataSources/mongodb'
 import { Todo } from './entities/Todo'
 import { TodoStatus } from './types/TodoStatus'
 import { ObjectID } from 'typeorm'
 import { ApolloError } from 'apollo-server-core'
+import { AuthModule } from '../Auth/AuthModule'
 
 export const todoModule = {
   // TODO better resolve of input format. Using { input: ... } does not match graphql types
   Query: {
     todos: async (_, {}, context: BaseContext) => {
-      const { userId } = authenticate(context.request)
+      const { userId } = AuthModule.authenticate(context.request)
 
       if (!userId) {
         throw new ApolloError('Authentication needed')
@@ -32,7 +32,7 @@ export const todoModule = {
       try {
         // TOOD add an auth guard that can be wrapped around the resolvers, avoiding repetition
 
-        const { userId } = authenticate(context.request)
+        const { userId } = AuthModule.authenticate(context.request)
 
         if (!userId) {
           throw new ApolloError('Authentication needed')
@@ -52,7 +52,7 @@ export const todoModule = {
       }
     },
     updateTodo: async (_, { input }, context: BaseContext) => {
-      const { userId } = authenticate(context.request)
+      const { userId } = AuthModule.authenticate(context.request)
 
       if (!userId) {
         throw new ApolloError('Authentication needed')

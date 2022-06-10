@@ -11,4 +11,6 @@ describe('todo', () => {
   })
 
   it.todo('creates a todo')
+  it.todo('updates a todo')
+  it.todo('soft deletes a todo')
 })

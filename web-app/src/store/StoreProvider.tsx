@@ -15,6 +15,13 @@ const StoreContext = React.createContext({} as StoreProviderType)
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [todos, setTodos] = useState<any[]>([])
 
+  const { data: todosData, loading, error, refetch } = useQuery(QUERY_MY_TODOS)
+  useEffect(() => {
+    if (todosData && todosData.todos) {
+      updateTodosList([...todos, ...todosData.todos])
+    }
+  }, [todosData])
+
   const addTodo = (todo: any) => {
     console.log('>>> adding todo', todo)
     setTodos([...todos, todo])
@@ -24,13 +31,6 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     console.log('>>> updating todos', extraItems)
     setTodos([...todos, ...extraItems])
   }
-
-  const { data: todosData, loading, error, refetch } = useQuery(QUERY_MY_TODOS)
-  useEffect(() => {
-    if (todosData && todosData.todos) {
-      updateTodosList([...todos, ...todosData.todos])
-    }
-  }, [todosData])
 
   return (
     <StoreContext.Provider value={{ todos, addTodo, updateTodosList }}>

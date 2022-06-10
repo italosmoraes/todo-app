@@ -34,26 +34,6 @@ const graphqlSchema = makeExecutableSchema({
   resolvers: [todoModule, usersModule]
 })
 
-// TODO add auth middleware
-export const authenticate = (req: Request) => {
-  console.log('>>> going through guard...')
-
-  const authToken = req.headers?.authorization?.split(' ')[1]
-
-  if (!authToken) {
-    throw new Error('No auth token provided')
-  }
-
-  try {
-    const decoded = jwt.verify(authToken, JWT_SECRET)
-    return {
-      userId: decoded.userId
-    }
-  } catch (error) {
-    throw new ApolloError('Invalid Token')
-  }
-}
-
 // server.use(AuthGuard)
 
 server.use(
