@@ -39,12 +39,23 @@ const Button = styled.div`
   cursor: pointer;
 `
 
-const TodoInputField = styled.input`
-  font-size: 16px;
+const TodoTextField = styled.input`
+  font-size: 14px;
   padding: 10px;
-  background: yellow;
+  background: #ae85a8;
   border: none;
-  border-radius: 3px;
+  border-radius: 5px;
+  height: 25px;
+`
+
+const TodoStatusField = styled.div`
+  font-size: 15px;
+  font-weight: 150;
+  font-style: italic;
+  padding: 10px;
+  background: #ae85a8;
+  border: none;
+  border-radius: 5px;
   height: 25px;
 `
 
@@ -53,23 +64,17 @@ export type TodoListProps = {}
 export function TodoList(props: TodoListProps) {
   const { todos, updateTodosList } = useStore()
 
-  //   const [todosList, setTodosList] = useState<any[]>([])
-
-  const { data: todosData, loading, error, refetch } = useQuery(QUERY_MY_TODOS)
-
-  useEffect(() => {
-    if (todosData && todosData.todos) {
-      updateTodosList(todosData.todos) // update store
-    }
-  }, [todosData])
-
-  //   useEffect(() => {}, [todos])
-
   return (
     <AddTodoContainer>
-      {todos.map((item) => (
-        <TodoRowContainer>{JSON.stringify(item)}</TodoRowContainer>
-      ))}
+      {todos.length > 0 &&
+        todos.map((item) => (
+          <TodoRowContainer key={item.id}>
+            <TodoTextField key={item.id} value={item.text} />
+            <TodoStatusField>{item.status}</TodoStatusField>
+            <Button>Done</Button>
+            <Button>Delete</Button>
+          </TodoRowContainer>
+        ))}
     </AddTodoContainer>
   )
 }

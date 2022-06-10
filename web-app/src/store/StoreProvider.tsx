@@ -1,4 +1,6 @@
+import { useQuery } from '@apollo/client'
 import React, { ReactNode, useContext, useEffect, useState } from 'react'
+import { QUERY_MY_TODOS } from '../graphql/queries'
 
 // TODO add proper types for all entities and vars
 
@@ -22,6 +24,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     console.log('>>> updating todos', extraItems)
     setTodos([...todos, ...extraItems])
   }
+
+  const { data: todosData, loading, error, refetch } = useQuery(QUERY_MY_TODOS)
+  useEffect(() => {
+    if (todosData && todosData.todos) {
+      updateTodosList([...todos, ...todosData.todos])
+    }
+  }, [todosData])
 
   return (
     <StoreContext.Provider value={{ todos, addTodo, updateTodosList }}>
