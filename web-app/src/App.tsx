@@ -7,6 +7,7 @@ const PageContainer = styled.div`
   margin-bottom: 50px;
   align-items: center;
   justify-content: center;
+  height: 100%:
 `
 
 function App() {

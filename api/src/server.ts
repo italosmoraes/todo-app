@@ -67,6 +67,10 @@ server.use(
     context: {
       request,
       response
+    },
+    formatError: (error: Error) => {
+      console.log('err >>', error)
+      return new ApolloError(error.message, 'err.apollo')
     }
   }))
 )
