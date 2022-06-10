@@ -39,6 +39,7 @@ export const Welcome = () => {
   const [showError, setShowError] = useState(false)
   const [error, setError] = useState()
 
+  // TODO move handling of login and signup to the AuthProvider
   const [createUser, { data: createUserData, loading, error: signupError }] =
     useMutation(CREATE_USER)
 

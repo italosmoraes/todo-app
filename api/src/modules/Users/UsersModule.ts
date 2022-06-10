@@ -1,4 +1,4 @@
-import { SecurityService } from '../../utils/SecurityService'
+import { SecurityService } from '../../services/SecurityService'
 import { mongodb } from '../../dataSources/mongodb'
 import { User } from './entities/User'
 

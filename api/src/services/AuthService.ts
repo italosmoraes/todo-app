@@ -1,10 +1,10 @@
 import { ApolloError } from 'apollo-server-core'
-import { JWT_SECRET } from '../../../config/env'
+import { JWT_SECRET } from '../../config/env'
 import { Request } from 'express'
 import jwt from 'jsonwebtoken'
 
 // TODO add auth middleware in a way that allows less repetitive way for resolves to use it
-export class AuthModule {
+export class AuthService {
   static authenticate = (req: Request) => {
     console.log('>>> going through guard...')
 
