@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client'
 import React, { ReactNode, useContext, useEffect, useState } from 'react'
+import useAuth from '../auth/AuthProvider'
 import { QUERY_MY_TODOS } from '../graphql/queries'
 
 // TODO add proper types for all entities and vars
@@ -14,8 +15,14 @@ const StoreContext = React.createContext({} as StoreProviderType)
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [todos, setTodos] = useState<any[]>([])
+  const { isLoggedIn } = useAuth()
 
   const { data: todosData, loading, error, refetch } = useQuery(QUERY_MY_TODOS)
+
+  useEffect(() => {
+    refetch()
+  }, [isLoggedIn])
+
   useEffect(() => {
     if (todosData && todosData.todos) {
       updateTodosList([...todos, ...todosData.todos])
