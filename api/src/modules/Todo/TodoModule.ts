@@ -6,11 +6,12 @@ import { TodoStatus } from './types/TodoStatus'
 import { ObjectID } from 'typeorm'
 import { ApolloError } from 'apollo-server-core'
 import { AuthService } from '../../services/AuthService'
+import { TodoCreateInput, UpdateTodoInput } from '@todo-app/shared-types'
 
 export const todoModule = {
   // TODO better resolve of input format. Using { input: ... } does not match graphql types
   Query: {
-    todos: async (_, {}, context: BaseContext) => {
+    todos: async (_, {}, context: BaseContext): Promise<Todo[]> => {
       const { userId } = AuthService.authenticate(context.request)
 
       if (!userId) {
@@ -28,10 +29,12 @@ export const todoModule = {
   },
 
   Mutation: {
-    createTodo: async (_, { input }, context: BaseContext) => {
+    createTodo: async (
+      _,
+      { input }: { input: TodoCreateInput },
+      context: BaseContext
+    ): Promise<Todo> => {
       try {
-        // TOOD add an auth guard that can be wrapped around the resolvers, avoiding repetition
-
         const { userId } = AuthService.authenticate(context.request)
 
         if (!userId) {
@@ -51,7 +54,11 @@ export const todoModule = {
         throw err
       }
     },
-    updateTodo: async (_, { input }, context: BaseContext) => {
+    updateTodo: async (
+      _,
+      { input }: { input: UpdateTodoInput },
+      context: BaseContext
+    ): Promise<Todo> => {
       const { userId } = AuthService.authenticate(context.request)
 
       if (!userId) {

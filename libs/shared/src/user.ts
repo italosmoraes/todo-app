@@ -1,4 +1,5 @@
 export interface CreateUserResponse {
+  user: User
   token: string
 }
 

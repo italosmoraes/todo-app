@@ -26,12 +26,6 @@
       "*": [
         ".",
         "node_modules/*"
-      ],
-      "@todo-app/shared-types": [
-        "../libs/shared/src"
-      ],
-      "@todo-app/shared-types/*": [
-        "../libs/shared/src/*"
       ]
     }
   },

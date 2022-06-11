@@ -40,7 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   // TODO username needs to be know from localStorage or from token, when user comes back
-  // or fetch it all again
+  // or fetch from api
   const updateUsername = (name: string) => {
     setUsername(name)
   }

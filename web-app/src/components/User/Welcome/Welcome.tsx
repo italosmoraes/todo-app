@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { Signup } from '../Signup/Signup'
 import { LoginForm } from '../Login/LoginForm'
 import useAuth from '../../../auth/AuthProvider'
+import { LoginResponse, CreateUserResponse } from '@todo-app/shared-types'
 
 const WelcomeContainer = styled.div`
   display: flex;
@@ -31,7 +32,6 @@ const ActionBtn = styled.div`
 `
 
 export const Welcome = () => {
-  // read auth token from store or from local storage
   const { setAuthToken, updateUsername } = useAuth()
 
   const [showSignUpForm, setShowSignUp] = useState(false)
@@ -40,10 +40,13 @@ export const Welcome = () => {
   const [error, setError] = useState()
 
   // TODO move handling of login and signup to the AuthProvider
-  const [createUser, { data: createUserData, loading, error: signupError }] =
-    useMutation(CREATE_USER)
+  const [createUser, { data: createUserData, loading, error: signupError }] = useMutation<{
+    createUser: CreateUserResponse
+  }>(CREATE_USER)
 
-  const [login, { data: loginData, loading: loadingLogin, error: loginError }] = useMutation(LOGIN)
+  const [login, { data: loginData, loading: loadingLogin, error: loginError }] = useMutation<{
+    login: LoginResponse
+  }>(LOGIN)
 
   const handleSignup = (formData) => {
     console.log('>>> signup', formData)
@@ -88,21 +91,6 @@ export const Welcome = () => {
     }
     // call store to login user and lead to the TODO dashboard
   }, [createUserData])
-
-  // const err = {
-  //   graphQLErrors: [],
-  //   clientErrors: [],
-  //   networkError: {
-  //     name: 'ServerError',
-  //     response: {},
-  //     statusCode: 500,
-  //     result: {
-  //       errors: [{ message: 'Invalid password', extensions: { code: 'err.apollo' } }],
-  //       data: null
-  //     }
-  //   },
-  //   message: 'Response not successful: Received status code 500'
-  // }
 
   useEffect(() => {
     const err = loginError || signupError

@@ -51,6 +51,16 @@ This project was built using:
 - docker-compose
 - React
 
+### To link the shared libs locally
+--------------------
+```
+cd ../libs/shared
+yarn link
+```
+
+run `yarn link "@todo-app/shared-types` to import to the desired project
+
+
 ### To build locally
 --------------------
 
@@ -111,6 +121,7 @@ yarn
 
 yarn test
 ```
+
 
 
 ### Potential improvements and notes

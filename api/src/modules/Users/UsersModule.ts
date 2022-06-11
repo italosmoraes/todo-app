@@ -1,11 +1,16 @@
 import { SecurityService } from '../../services/SecurityService'
 import { mongodb } from '../../dataSources/mongodb'
 import { User } from './entities/User'
+import {
+  CreateUserInput,
+  CreateUserResponse,
+  LoginInput,
+  LoginResponse
+} from '@todo-app/shared-types'
 
-// TODO once we have the todos, create the users module
 export const usersModule = {
   Mutation: {
-    createUser: async (_, { input }) => {
+    createUser: async (_, { input }: { input: CreateUserInput }): Promise<CreateUserResponse> => {
       try {
         // TODO validate username not in use
 
@@ -32,7 +37,7 @@ export const usersModule = {
         throw error
       }
     },
-    login: async (_, { input }) => {
+    login: async (_, { input }: { input: LoginInput }): Promise<LoginResponse> => {
       const user = await mongodb.manager.findOneBy(User, { username: input.username })
 
       if (!user) {
