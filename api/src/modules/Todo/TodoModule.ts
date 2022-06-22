@@ -69,25 +69,36 @@ export const todoModule = {
         throw new ApolloError('Authentication needed')
       }
 
-      // TODO fix stupid typeorm not letting me simply save the entity and get it back to return
+      // TODO mongodb.manager is stupid and one needs to find the item to verify it exists first
+      // loads of silly repetitions below, because of siliness on how to update
+      // cant use manage.save() without instantiating a new Todo() - wtf?!
+
+      const record = await mongodb.manager.findOne(Todo, {
+        // @ts-ignore cannot resolve _id type as ObjectId from mongodb
+        where: { _id: new ObjectId(input.todoId) }
+      })
+
+      if (!record) {
+        throw new ApolloError('Todo not found')
+      }
 
       try {
         await mongodb.manager.update(Todo, new ObjectId(input.todoId), {
-          status: input.status,
-          text: input.text,
-          dueAt: input.dueAt
+          status: input.status || record.status,
+          text: input.text || record.text, // TODO guard : ensure not empty
+          dueAt: input.dueAt || record.dueAt // TODO ensure this is a date
         })
 
-        const record = await mongodb.manager.findOne(Todo, {
+        const saved = await mongodb.manager.findOne(Todo, {
           // @ts-ignore cannot resolve _id type as ObjectId from mongodb
           where: { _id: new ObjectId(input.todoId) }
         })
 
-        if (!record) {
+        if (!saved) {
           throw new ApolloError('Todo not found')
         }
 
-        return record
+        return saved
       } catch (error) {
         throw new ApolloError(error.message, error.code)
       }

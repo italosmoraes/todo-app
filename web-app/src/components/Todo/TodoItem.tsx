@@ -52,7 +52,10 @@ const TodoStatusField = styled.div`
 export type TodoItemProps = { item: any }
 
 export function TodoItem({ item }: TodoItemProps) {
+  const { refetchList } = useStore()
+
   const [text, setText] = useState(item.text)
+  const [confirm, setConfirm] = useState(false)
 
   // useEffect(() => {
   //   setText(text)
@@ -62,6 +65,14 @@ export function TodoItem({ item }: TodoItemProps) {
     variables: { input: text }
   })
 
+  useEffect(() => {
+    refetchList()
+  }, updateData)
+
+  const handleConfirm = () => {}
+
+  const handleCancel = () => {}
+
   return (
     <TodoRowContainer key={item.id}>
       <TodoTextField
@@ -69,11 +80,18 @@ export function TodoItem({ item }: TodoItemProps) {
         value={text}
         onChange={(evt) => {
           setText(evt.target.value)
+          setConfirm(true)
         }}
       />
+      {confirm && <Button>confirm</Button>}
+      {confirm && <Button>cancel</Button>}
       <TodoStatusField>{item.status}</TodoStatusField>
       {item.dueAt && <TodoStatusField>{item.dueAt}</TodoStatusField>}
-      <Button>Done</Button>
+      <Button
+        onClick={() => updateTodo({ variables: { input: { todoId: item.id, status: 'DONE' } } })}
+      >
+        Done
+      </Button>
       <Button>Delete</Button>
     </TodoRowContainer>
   )

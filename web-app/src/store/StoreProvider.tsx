@@ -8,7 +8,7 @@ import { QUERY_MY_TODOS } from '../graphql/queries'
 export interface StoreProviderType {
   todos: any[]
   addTodo: (todo: any) => void
-  updateTodosList: (todos: any[]) => void
+  refetchList: () => void
 }
 
 const StoreContext = React.createContext({} as StoreProviderType)
@@ -26,22 +26,16 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (todosData && todosData.todos) {
-      updateTodosList([...todos, ...todosData.todos])
+      setTodos([...todosData.todos])
     }
   }, [todosData])
 
   const addTodo = (todo: any) => {
-    // todos.unshift(todo)
-    console.log('unshifted ---', todos)
     setTodos([todo, ...todos])
   }
 
-  const updateTodosList = (extraItems: any[]) => {
-    setTodos([...todos, ...extraItems])
-  }
-
   return (
-    <StoreContext.Provider value={{ todos, addTodo, updateTodosList }}>
+    <StoreContext.Provider value={{ todos, addTodo, refetchList: refetch }}>
       {children}
     </StoreContext.Provider>
   )
