@@ -7,6 +7,7 @@ import { ObjectID } from 'typeorm'
 import { ApolloError } from 'apollo-server-core'
 import { AuthService } from '../../services/AuthService'
 import { TodoCreateInput, UpdateTodoInput } from '@todo-app/shared-types'
+import { DateTime } from 'luxon'
 
 export const todoModule = {
   // TODO better resolve of input format. Using { input: ... } does not match graphql types
@@ -20,7 +21,8 @@ export const todoModule = {
 
       const records = await mongodb.manager.find(Todo, {
         // @ts-ignore cannot resolve _id type as ObjectId from mongodb
-        where: { userId: new ObjectId(userId) }
+        where: { userId: new ObjectId(userId) },
+        order: { createdAt: 'DESC' }
       })
 
       // TODO  return paginated list?
@@ -45,6 +47,8 @@ export const todoModule = {
         todo.userId = new ObjectId(userId)
         todo.text = input.text
         todo.status = TodoStatus.PENDING
+        todo.dueAt = input.dueAt
+        todo.createdAt = DateTime.now().toUTC().toJSDate()
 
         const saved = await mongodb.manager.save(todo)
 
@@ -65,21 +69,28 @@ export const todoModule = {
         throw new ApolloError('Authentication needed')
       }
 
-      const record = await mongodb.manager.findOne(Todo, {
-        // @ts-ignore cannot resolve _id type as ObjectId from mongodb
-        where: { _id: new ObjectId(input.todoId) }
-      })
-      console.log(record)
-      if (!record) {
-        throw new ApolloError('Todo not found')
+      // TODO fix stupid typeorm not letting me simply save the entity and get it back to return
+
+      try {
+        await mongodb.manager.update(Todo, new ObjectId(input.todoId), {
+          status: input.status,
+          text: input.text,
+          dueAt: input.dueAt
+        })
+
+        const record = await mongodb.manager.findOne(Todo, {
+          // @ts-ignore cannot resolve _id type as ObjectId from mongodb
+          where: { _id: new ObjectId(input.todoId) }
+        })
+
+        if (!record) {
+          throw new ApolloError('Todo not found')
+        }
+
+        return record
+      } catch (error) {
+        throw new ApolloError(error.message, error.code)
       }
-
-      record.status = input.status || record.status
-      record.text = input.text || record.text
-
-      await mongodb.manager.save(record)
-
-      return record
     }
   }
 }

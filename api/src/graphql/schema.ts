@@ -30,12 +30,14 @@ export const typeDefs = `
 
     input TodoCreateInput {
         text: String!
+        dueAt: String
     }
 
     input UpdateTodoInput {
         todoId: String!
         text: String
         status: TodoStatus
+        dueAt: String
     }
 
     input CreateUserInput {
@@ -56,6 +58,7 @@ export const typeDefs = `
         id: String!
         text: String!
         status: TodoStatus!
+        dueAt: String
     }
 
     enum TodoStatus {

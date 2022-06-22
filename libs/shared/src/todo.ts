@@ -1,11 +1,13 @@
 export interface TodoCreateInput {
   text: string
+  dueAt?: string
 }
 
 export interface UpdateTodoInput {
   todoId: string
   status: TodoStatus
   text?: string
+  dueAt?: string
 }
 
 export enum TodoStatus {

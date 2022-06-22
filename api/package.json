@@ -20,6 +20,7 @@
     "graphql": "^16.5.0",
     "jest-extended": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
+    "luxon": "^2.4.0",
     "mongodb": "^4.7.0",
     "prettier": "^2.6.2",
     "reflect-metadata": "^0.1.13",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@types/jest": "^28.1.1",
+    "@types/luxon": "^2.3.2",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
     "eslint": "^8.16.0",

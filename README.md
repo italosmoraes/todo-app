@@ -27,6 +27,7 @@ Task list:
 - (/) update todo API
 - (/) delete todo API
 - (/) make local env available for usage
+- (/) align types on BE and FE with shared lib
 - () dockerfile for api
 - () dockerfile for web-app
 - () update todo FE

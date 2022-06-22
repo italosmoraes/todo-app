@@ -15,4 +15,10 @@ export class Todo {
 
   @Column()
   status: TodoStatus
+
+  @Column()
+  createdAt: Date
+
+  @Column({ nullable: true })
+  dueAt?: string // ISO
 }
