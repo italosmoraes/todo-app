@@ -6,6 +6,7 @@ export const QUERY_MY_TODOS = gql`
       id
       text
       status
+      dueAt
     }
   }
 `

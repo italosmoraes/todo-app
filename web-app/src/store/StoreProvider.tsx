@@ -31,12 +31,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, [todosData])
 
   const addTodo = (todo: any) => {
-    console.log('>>> adding todo', todo)
-    setTodos([...todos, todo])
+    // todos.unshift(todo)
+    console.log('unshifted ---', todos)
+    setTodos([todo, ...todos])
   }
 
   const updateTodosList = (extraItems: any[]) => {
-    console.log('>>> updating todos', extraItems)
     setTodos([...todos, ...extraItems])
   }
 

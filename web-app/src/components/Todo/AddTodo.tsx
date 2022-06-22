@@ -57,8 +57,10 @@ export function AddTodo(props: AddTodoProps) {
 
   const [todo, setTodo] = useState<any>()
 
+  const [dueAt, setDueAt] = useState<string | null>(null)
+
   const handleAdd = async (todo: any) => {
-    const result = await todoMutation({ variables: { input: { text: todo } } })
+    const result = await todoMutation({ variables: { input: { text: todo, dueAt } } })
 
     if (result.data) {
       addTodo(result.data.createTodo)
@@ -71,6 +73,7 @@ export function AddTodo(props: AddTodoProps) {
     <AddTodoContainer>
       <TodoRowContainer>
         <TodoInputField size={50} onChange={(evt) => setTodo(evt.target.value)} />{' '}
+        <TodoInputField size={20} onChange={(evt) => setDueAt(evt.target.value)} />{' '}
         <Button onClick={() => handleAdd(todo)}>ADD</Button>
       </TodoRowContainer>
     </AddTodoContainer>
