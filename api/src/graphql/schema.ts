@@ -9,6 +9,7 @@ export const typeDefs = `
     type Mutation {
         createTodo(input: TodoCreateInput): Todo!
         updateTodo(input: UpdateTodoInput): Todo!
+        deleteTodo(input: DeleteTodoInput): Boolean!
         createUser(input: CreateUserInput): CreateUserResponse!
         login(input: LoginInput): LoginResponse!
     }
@@ -38,6 +39,10 @@ export const typeDefs = `
         text: String
         status: TodoStatus
         dueAt: String
+    }
+
+    input DeleteTodoInput {
+        todoId: String!
     }
 
     input CreateUserInput {

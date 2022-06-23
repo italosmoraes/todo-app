@@ -10,6 +10,14 @@ export interface UpdateTodoInput {
   dueAt?: string
 }
 
+export interface DeleteTodoInput {
+  todoId: string
+}
+
+export interface DeleteTodoResponse {
+  deleted: boolean
+}
+
 export enum TodoStatus {
   PENDING = 'PENDING',
   STARTED = 'STARTED',

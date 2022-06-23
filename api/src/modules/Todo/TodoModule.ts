@@ -3,10 +3,9 @@ import { ObjectId } from 'mongodb'
 import { mongodb } from '../../dataSources/mongodb'
 import { Todo } from './entities/Todo'
 import { TodoStatus } from './types/TodoStatus'
-import { ObjectID } from 'typeorm'
 import { ApolloError } from 'apollo-server-core'
 import { AuthService } from '../../services/AuthService'
-import { TodoCreateInput, UpdateTodoInput } from '@todo-app/shared-types'
+import { TodoCreateInput, UpdateTodoInput, DeleteTodoInput } from '@todo-app/shared-types'
 import { DateTime } from 'luxon'
 
 export const todoModule = {
@@ -56,6 +55,36 @@ export const todoModule = {
       } catch (err) {
         console.log('Error:', err)
         throw err
+      }
+    },
+    deleteTodo: async (
+      _,
+      { input }: { input: DeleteTodoInput },
+      context: BaseContext
+    ): Promise<boolean> => {
+      const { userId } = AuthService.authenticate(context.request)
+
+      if (!userId) {
+        throw new ApolloError('Authentication needed')
+      }
+
+      try {
+        const record = await mongodb.manager.findOne(Todo, {
+          // @ts-ignore cannot resolve _id type as ObjectId from mongodb
+          where: { _id: new ObjectId(input.todoId) }
+        })
+
+        if (!record) {
+          throw new ApolloError('Todo not found')
+        }
+
+        await mongodb.manager.update(Todo, new ObjectId(input.todoId), {
+          status: TodoStatus.DELETED
+        })
+
+        return true
+      } catch (error) {
+        throw new ApolloError(error.message, error.code)
       }
     },
     updateTodo: async (
