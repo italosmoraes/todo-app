@@ -20,7 +20,7 @@ export const todoModule = {
 
       const records = await mongodb.manager.find(Todo, {
         // @ts-ignore cannot resolve _id type as ObjectId from mongodb
-        where: { userId: new ObjectId(userId) },
+        where: { userId: new ObjectId(userId), status: { $ne: TodoStatus.DELETED } },
         order: { createdAt: 'DESC' }
       })
 

@@ -67,7 +67,11 @@ export function TodoItem({ item }: TodoItemProps) {
 
   useEffect(() => {
     refetchList()
-  }, updateData)
+  }, [updateData])
+
+  const markDone = () => {
+    updateTodo({ variables: { input: { todoId: item.id, status: 'DONE' } } })
+  }
 
   const handleConfirm = () => {}
 
@@ -87,11 +91,7 @@ export function TodoItem({ item }: TodoItemProps) {
       {confirm && <Button>cancel</Button>}
       <TodoStatusField>{item.status}</TodoStatusField>
       {item.dueAt && <TodoStatusField>{item.dueAt}</TodoStatusField>}
-      <Button
-        onClick={() => updateTodo({ variables: { input: { todoId: item.id, status: 'DONE' } } })}
-      >
-        Done
-      </Button>
+      <Button onClick={() => markDone()}>Done</Button>
       <Button>Delete</Button>
     </TodoRowContainer>
   )
