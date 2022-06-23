@@ -73,7 +73,7 @@ export function AddTodo(props: AddTodoProps) {
     <AddTodoContainer>
       <TodoRowContainer>
         <TodoInputField size={50} onChange={(evt) => setTodo(evt.target.value)} />{' '}
-        <TodoInputField size={20} onChange={(evt) => setDueAt(evt.target.value)} />{' '}
+        {/* <TodoInputField size={20} onChange={(evt) => setDueAt(evt.target.value)} />{' '} */}
         <Button onClick={() => handleAdd(todo)}>ADD</Button>
       </TodoRowContainer>
     </AddTodoContainer>
