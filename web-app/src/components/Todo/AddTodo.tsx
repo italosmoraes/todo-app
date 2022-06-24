@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import useStore from '../../store/StoreProvider'
 import { useMutation } from '@apollo/client'
 import { CREATE_TODO } from '../../graphql/mutations'
-import { Todo } from '@todo-app/shared-types'
 
 const AddTodoContainer = styled.div`
   display: flex;
@@ -53,7 +52,7 @@ export type AddTodoProps = {}
 export function AddTodo(props: AddTodoProps) {
   const { addTodo } = useStore()
 
-  const [todoMutation, { loading, error }] = useMutation<{ createTodo: Todo }>(CREATE_TODO)
+  const [todoMutation, { loading, error }] = useMutation<{ createTodo: any }>(CREATE_TODO)
 
   const [todo, setTodo] = useState<any>()
 

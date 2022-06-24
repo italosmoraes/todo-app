@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import { Signup } from '../Signup/Signup'
 import { LoginForm } from '../Login/LoginForm'
 import useAuth from '../../../auth/AuthProvider'
-import { LoginResponse, CreateUserResponse } from '@todo-app/shared-types'
 
 const WelcomeContainer = styled.div`
   display: flex;
@@ -41,11 +40,11 @@ export const Welcome = () => {
 
   // TODO move handling of login and signup to the AuthProvider
   const [createUser, { data: createUserData, loading, error: signupError }] = useMutation<{
-    createUser: CreateUserResponse
+    createUser: any // CreateUserResponse
   }>(CREATE_USER)
 
   const [login, { data: loginData, loading: loadingLogin, error: loginError }] = useMutation<{
-    login: LoginResponse
+    login: any // LoginResponse
   }>(LOGIN)
 
   const handleSignup = (formData) => {
