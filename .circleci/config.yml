@@ -13,8 +13,19 @@ orbs:
   aws-ecr: circleci/aws-ecr@6.15
   aws-ecs: circleci/aws-ecs@2.0.0
 
+parameters:
+  aws-region:
+    type: string
+    default: "eu-west-1"
+  aws-ecr-account-url:
+    type: string
+    default: "631147605394.dkr.ecr.eu-west-1.amazonaws.com/todo-app-api"
+
 jobs:
   deploy-api:
+    environment:
+      IMAGETAG: << pipeline.parameters.aws-region >>
+      AWS_ECR_ACCOUNT_URL: << pipeline.parameters.aws-ecr-account-url >>
     resource_class: micro
     docker:
       - image: cimg/node:16.13.0
