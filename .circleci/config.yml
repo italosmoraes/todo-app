@@ -24,7 +24,7 @@ parameters:
 jobs:
   deploy-api:
     environment:
-      IMAGETAG: << pipeline.parameters.aws-region >>
+      AWS_REGION: << pipeline.parameters.aws-region >>
       AWS_ECR_ACCOUNT_URL: << pipeline.parameters.aws-ecr-account-url >>
     resource_class: micro
     docker:
