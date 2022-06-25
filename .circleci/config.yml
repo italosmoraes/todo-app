@@ -11,7 +11,7 @@ commands:
 orbs:
   node: circleci/node@4.2.1 # https://circleci.com/developer/orbs/orb/circleci/node
   aws-ecr: circleci/aws-ecr@6.15
-  aws-ecs: circleci/aws-ecs@2.3.0
+  aws-ecs: circleci/aws-ecs@2.0.0
 
 jobs:
   deploy-api:
@@ -28,8 +28,8 @@ jobs:
       - aws-ecr/build-and-push-image:
           account-url: AWS_ECR_ACCOUNT_URL
           region: AWS_REGION
-          repo: "${AWS_RESOURCE_NAME_PREFIX}"
-          tag: "${CIRCLE_SHA1}"
+          repo: '${MY_APP_PREFIX}'
+          tag: '${CIRCLE_SHA1}'
 
 workflows:
   version: 2
