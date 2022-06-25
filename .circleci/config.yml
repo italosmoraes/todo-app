@@ -3,10 +3,10 @@ version: 2.1
 # https://circleci.com/docs/2.0/reusing-config/#invoking-reusable-commands
 commands:
   build-project:
-    description: "Build API the project"
+    description: "Build API the project - from /api folder"
     steps:
       - run: |
-          cd api && yarn build
+          cd ./api
 
 orbs:
   node: circleci/node@4.2.1 # https://circleci.com/developer/orbs/orb/circleci/node
