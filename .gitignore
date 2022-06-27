@@ -2,6 +2,7 @@ dist/
 .idea/
 .vscode/
 node_modules/
+todo-app-infrastructure/
 **/node_modules/*
 build/
 **/build/*
