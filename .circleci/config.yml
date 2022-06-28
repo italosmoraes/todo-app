@@ -39,6 +39,7 @@ workflows:
     jobs:
       - build-api
       - aws-ecr/build-and-push-image:
+          dockerfile: api/Dockerfile
           account-url: ACCOUNT_URL
           repo: REPO
           region: REGION
