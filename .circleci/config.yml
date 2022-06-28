@@ -41,7 +41,6 @@ workflows:
       - aws-ecr/build-and-push-image:
           requires:
             - build-api
-          dockerfile: api/Dockerfile
           account-url: ACCOUNT_URL
           repo: REPO
           region: REGION
