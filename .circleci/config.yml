@@ -6,9 +6,9 @@ commands:
     description: "Build API the project"
     steps:
       - run:
-          cd api
-      - node/install-packages:
-          pkg-manager: yarn
+          cd api && yarn
+      # - node/install-packages:
+      #     pkg-manager: yarn
       - run:
           yarn build
       
