@@ -27,10 +27,6 @@ jobs:
     resource_class: micro
     docker:
       - image: cimg/node:16.13.0
-    environment:
-      ACCOUNT_URL: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-      REPO: "${AWS_RESOURCE_NAME_PREFIX}"
-      REGION: ${AWS_DEFAULT_REGION}
     steps:
       - checkout
       - setup_remote_docker:
