@@ -5,13 +5,19 @@ commands:
   build-project:
     description: "Build API the project"
     steps:
-      - run: |
-          cd api && yarn build
-
+      - run:
+          cd api && yarn
+      # - node/install-packages:
+      #     pkg-manager: yarn
+      - run:
+          yarn build
+      
 environment:
   ACCOUNT_URL: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
   REPO: "${AWS_RESOURCE_NAME_PREFIX}"
   REGION: ${AWS_DEFAULT_REGION}
+  FAMILY: "${AWS_RESOURCE_NAME_PREFIX}-service"
+  CLUSTER-NAME: "${AWS_RESOURCE_NAME_PREFIX}-cluster"
 
 orbs:
   node: circleci/node@4.2.1 # https://circleci.com/developer/orbs/orb/circleci/node
@@ -19,7 +25,7 @@ orbs:
   aws-ecs: circleci/aws-ecs@2.0.0
 
 jobs:
-  deploy-api:
+  build-api:
     resource_class: micro
     docker:
       - image: cimg/node:16.13.0
@@ -31,15 +37,13 @@ jobs:
       - checkout
       - setup_remote_docker:
           version: 19.03.13
-      - node/install-packages:
-          pkg-manager: yarn
       - build-project
 
 workflows:
   version: 2
   deploy_services:
     jobs:
-      - deploy-api
+      - build-api
       - aws-ecr/build-and-push-image:
           account-url: ACCOUNT_URL
           repo: REPO
@@ -49,8 +53,8 @@ workflows:
           requires:
             - aws-ecr/build-and-push-image
           aws-region: AWS_DEFAULT_REGION
-          family: "${AWS_RESOURCE_NAME_PREFIX}-service"
-          cluster-name: "${AWS_RESOURCE_NAME_PREFIX}-cluster"
+          family: FAMILY
+          cluster-name: CLUSTER_NAME
           container-image-name-updates: "container=${AWS_RESOURCE_NAME_PREFIX}-service,image-and-tag=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AWS_RESOURCE_NAME_PREFIX}:${CIRCLE_SHA1}"
           verify-revision-is-deployed: true
           post-steps:
