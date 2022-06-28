@@ -2,7 +2,6 @@ dist/
 .idea/
 .vscode/
 node_modules/
-todo-app-infrastructure/
 **/node_modules/*
 build/
 **/build/*
@@ -14,3 +13,6 @@ temp/
 yarn-error.log
 
 *.resources
+
+todo-app-infrastructure/
+todo-app-api/
