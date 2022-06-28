@@ -9,8 +9,6 @@ commands:
           cd api && yarn
       # - node/install-packages:
       #     pkg-manager: yarn
-      - run:
-          yarn build
       
 environment:
   ACCOUNT_URL: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
