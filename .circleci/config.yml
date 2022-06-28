@@ -1,0 +1,67 @@
+version: 2.1
+
+# https://circleci.com/docs/2.0/reusing-config/#invoking-reusable-commands
+commands:
+  build-project:
+    description: "Build API the project"
+    steps:
+      - run:
+          cd api && yarn
+      # - node/install-packages:
+      #     pkg-manager: yarn
+      - run:
+          yarn build
+      
+environment:
+  ACCOUNT_URL: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+  REPO: "${AWS_RESOURCE_NAME_PREFIX}"
+  REGION: ${AWS_DEFAULT_REGION}
+  FAMILY: "${AWS_RESOURCE_NAME_PREFIX}-service"
+  CLUSTER-NAME: "${AWS_RESOURCE_NAME_PREFIX}-cluster"
+
+orbs:
+  node: circleci/node@4.2.1 # https://circleci.com/developer/orbs/orb/circleci/node
+  aws-ecr: circleci/aws-ecr@6.15
+  aws-ecs: circleci/aws-ecs@2.0.0
+
+jobs:
+  build-api:
+    resource_class: micro
+    docker:
+      - image: cimg/node:16.13.0
+    environment:
+      ACCOUNT_URL: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+      REPO: "${AWS_RESOURCE_NAME_PREFIX}"
+      REGION: ${AWS_DEFAULT_REGION}
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 19.03.13
+      - build-project
+
+workflows:
+  version: 2
+  deploy_services:
+    jobs:
+      - build-api
+      - aws-ecr/build-and-push-image:
+          account-url: ACCOUNT_URL
+          repo: REPO
+          region: REGION
+          tag: "${CIRCLE_SHA1}"
+      - aws-ecs/deploy-service-update:
+          requires:
+            - aws-ecr/build-and-push-image
+          aws-region: AWS_DEFAULT_REGION
+          family: FAMILY
+          cluster-name: CLUSTER_NAME
+          container-image-name-updates: "container=${AWS_RESOURCE_NAME_PREFIX}-service,image-and-tag=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AWS_RESOURCE_NAME_PREFIX}:${CIRCLE_SHA1}"
+          verify-revision-is-deployed: true
+          post-steps:
+            - run:
+                name: Test the deployment
+                command: |
+                  TARGET_GROUP_ARN=$(aws ecs describe-services --cluster ${AWS_RESOURCE_NAME_PREFIX}-cluster --services ${AWS_RESOURCE_NAME_PREFIX}-service | jq -r '.services[0].loadBalancers[0].targetGroupArn')
+                  ELB_ARN=$(aws elbv2 describe-target-groups --target-group-arns $TARGET_GROUP_ARN | jq -r '.TargetGroups[0].LoadBalancerArns[0]')
+                  ELB_DNS_NAME=$(aws elbv2 describe-load-balancers --load-balancer-arns $ELB_ARN | jq -r '.LoadBalancers[0].DNSName')
+                  curl -s --retry 10 http://$ELB_DNS_NAME | grep "Welcome to nginx!"
