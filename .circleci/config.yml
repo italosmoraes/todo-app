@@ -7,8 +7,8 @@ commands:
     steps:
       - run:
           cd api && yarn
-      # - node/install-packages:
-      #     pkg-manager: yarn
+      - node/install-packages:
+          pkg-manager: yarn
       
 environment:
   ACCOUNT_URL: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
